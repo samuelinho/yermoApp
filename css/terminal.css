@@ -462,6 +462,73 @@ retro-terminal::before {
 }
 
 /* ============================================================
+   Bezel button — controles "on-screen" del monitor
+   Monocromo verde fósforo, mismo estilo que el texto.
+   z-index 3: por encima del texto (2) pero debajo de
+   vignette (9), scanlines (10), canvas (11), barrel (12)
+   para que le afecten todos los efectos CRT.
+   ============================================================ */
+.bezel-btn {
+  position: absolute;
+  bottom: var(--term-padding);
+  right: var(--term-padding);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  color: var(--term-fg);
+  font-family: var(--term-font);
+  font-size: var(--term-font-size);
+  line-height: var(--term-line-height);
+  opacity: 0.4;
+  transition: opacity 0.25s;
+  text-shadow:
+    0 0 6px var(--term-glow),
+    0 0 15px rgba(0, 255, 102, 0.25);
+}
+
+.bezel-btn:hover {
+  opacity: 0.85;
+}
+
+.bezel-btn:active {
+  opacity: 1;
+}
+
+/* LED indicator — punto verde fósforo */
+.bezel-led {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: rgba(0, 255, 102, 0.15);
+  border: none;
+  box-shadow: none;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.bezel-btn.active .bezel-led {
+  background: var(--term-fg);
+  box-shadow:
+    0 0 4px var(--term-glow),
+    0 0 10px rgba(0, 255, 102, 0.4);
+}
+
+/* Label — misma tipografía y color que el terminal */
+.bezel-label {
+  font: inherit;
+  color: inherit;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 600px) {

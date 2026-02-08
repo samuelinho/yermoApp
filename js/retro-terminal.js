@@ -185,6 +185,10 @@ class RetroTerminal extends HTMLElement {
         <div class="vignette"></div>
         <div class="scanlines"></div>
         <canvas class="crt-canvas"></canvas>
+        <button class="bezel-btn music-toggle" aria-label="Play/Pause music" title="AUDIO">
+          <span class="bezel-led"></span>
+          <span class="bezel-label">SOUND</span>
+        </button>
       </div>
     `;
 
@@ -192,6 +196,8 @@ class RetroTerminal extends HTMLElement {
       screen: this.querySelector('.terminal-screen'),
       output: this.querySelector('.terminal-output'),
       canvas: this.querySelector('.crt-canvas'),
+      musicBtn: this.querySelector('.music-toggle'),
+      musicLed: this.querySelector('.music-toggle .bezel-led'),
     };
   }
 
@@ -208,11 +214,24 @@ class RetroTerminal extends HTMLElement {
       if (!this._audioActivated) {
         this.audio.init();
         this.audio.startHum();
+        this.audio.playBgMusic('data/playlist.json').then(() => {
+          this._els.musicBtn.classList.add('active');
+        });
         this._audioActivated = true;
       }
     };
     this.addEventListener('click', activateAudio, { once: false });
     document.addEventListener('keydown', activateAudio, { once: false });
+
+    // Botón play/pause de música
+    this._els.musicBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!this._audioActivated) {
+        activateAudio();
+      }
+      const playing = this.audio.toggleBgMusic();
+      this._els.musicBtn.classList.toggle('active', playing);
+    });
   }
 
   /**

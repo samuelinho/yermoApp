@@ -9,7 +9,7 @@ export class TerminalAudio {
     /** @type {AudioContext|null} */
     this.ctx = null;
     /** Volumen maestro (0-1) */
-    this.masterVolume = 0.3;
+    this.masterVolume = 0.6;
     /** ¿Se ha activado el contexto de audio? (requiere gesto del usuario) */
     this.initialized = false;
     /** Nodo de ganancia maestro */
@@ -17,6 +17,9 @@ export class TerminalAudio {
     /** Nodo del zumbido de fondo */
     this._humOsc = null;
     this._humGain = null;
+    /** Elemento de audio para música de fondo */
+    this._bgMusic = null;
+    this._bgMusicGain = null;
   }
 
   /* ----------------------------------------------------------
@@ -274,6 +277,125 @@ export class TerminalAudio {
   }
 
   /* ----------------------------------------------------------
+     Música de fondo (fichero de audio)
+     ---------------------------------------------------------- */
+
+  /**
+   * Carga una playlist desde un JSON y reproduce una pista aleatoria.
+   * Al terminar cada pista, elige otra aleatoria (sin repetir la anterior).
+   * @param {string} playlistUrl  Ruta al JSON con { volume?, tracks: string[] }
+   * @param {number} [volumeOverride]  Volumen (0-1). Si no se pasa, usa el del JSON o 0.25.
+   */
+  async playBgMusic(playlistUrl, volumeOverride) {
+    if (!this.initialized || this._bgMusic) return;
+    this._ensureRunning();
+
+    // --- Cargar playlist ---
+    let playlist;
+    try {
+      const res = await fetch(playlistUrl);
+      playlist = await res.json();
+    } catch (e) {
+      console.warn('[TerminalAudio] No se pudo cargar la playlist:', e);
+      return;
+    }
+
+    const tracks = playlist.tracks;
+    if (!tracks || tracks.length === 0) return;
+
+    const volume = volumeOverride ?? playlist.volume ?? 0.25;
+    this._bgPlaylist = tracks;
+    this._bgLastIndex = -1;
+
+    // --- Nodo de ganancia compartido para toda la música de fondo ---
+    this._bgMusicGain = this.ctx.createGain();
+    this._bgMusicGain.gain.value = volume;
+    this._bgMusicGain.connect(this.masterGain);
+
+    this._playRandomTrack();
+  }
+
+  /**
+   * Elige una pista aleatoria (distinta a la anterior) y la reproduce.
+   * Al terminar, encadena otra pista.
+   */
+  _playRandomTrack() {
+    if (!this._bgPlaylist || !this.initialized) return;
+
+    const tracks = this._bgPlaylist;
+    let idx;
+    // Evitar repetir la misma pista consecutivamente
+    if (tracks.length > 1) {
+      do { idx = Math.floor(Math.random() * tracks.length); }
+      while (idx === this._bgLastIndex);
+    } else {
+      idx = 0;
+    }
+    this._bgLastIndex = idx;
+
+    // Limpiar audio anterior si existe
+    if (this._bgMusic) {
+      this._bgMusic.pause();
+      this._bgMusic.removeAttribute('src');
+      this._bgMusic.load();
+    }
+
+    const audio = new Audio(tracks[idx]);
+    audio.crossOrigin = 'anonymous';
+    audio.loop = false;
+
+    // Cada Audio element necesita su propio MediaElementSource
+    const source = this.ctx.createMediaElementSource(audio);
+    source.connect(this._bgMusicGain);
+
+    // Al terminar la pista, reproducir otra aleatoria
+    audio.addEventListener('ended', () => this._playRandomTrack());
+    // En caso de error de red, intentar otra
+    audio.addEventListener('error', () => {
+      console.warn('[TerminalAudio] Error cargando pista, saltando...');
+      setTimeout(() => this._playRandomTrack(), 1000);
+    });
+
+    audio.play().catch(() => {});
+    this._bgMusic = audio;
+  }
+
+  /**
+   * Pausa o reanuda la música de fondo.
+   * @returns {boolean} true si queda sonando, false si queda en pausa.
+   */
+  toggleBgMusic() {
+    if (!this._bgMusic) return false;
+    if (this._bgMusic.paused) {
+      this._bgMusic.play().catch(() => {});
+      return true;
+    } else {
+      this._bgMusic.pause();
+      return false;
+    }
+  }
+
+  /** @returns {boolean} true si la música de fondo está sonando */
+  get isBgMusicPlaying() {
+    return this._bgMusic ? !this._bgMusic.paused : false;
+  }
+
+  /**
+   * Detiene la música de fondo.
+   */
+  stopBgMusic() {
+    if (this._bgMusic) {
+      this._bgMusic.pause();
+      this._bgMusic.removeAttribute('src');
+      this._bgMusic.load();
+      this._bgMusic = null;
+    }
+    this._bgMusicGain = null;
+    this._bgPlaylist = null;
+    this._bgLastIndex = -1;
+  }
+
+  /* ----------------------------------------------------------
      Reproducir sonido por nombre (desde el JSON)
      ---------------------------------------------------------- */
 
@@ -296,6 +418,7 @@ export class TerminalAudio {
      Limpieza
      ---------------------------------------------------------- */
   destroy() {
+    this.stopBgMusic();
     this.stopHum();
     if (this.ctx) {
       this.ctx.close();
