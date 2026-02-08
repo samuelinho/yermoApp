@@ -129,9 +129,11 @@ retro-terminal::before {
   line-height: var(--term-line-height);
   white-space: pre;
   text-shadow:
-    0 0 6px var(--term-glow),
-    0 0 15px rgba(0, 255, 102, 0.25),
-    0 0 30px rgba(0, 255, 102, 0.08);
+    0 0 2px var(--term-fg),
+    0 0 8px var(--term-glow),
+    0 0 20px var(--term-glow),
+    0 0 40px rgba(0, 255, 102, 0.25),
+    0 0 80px rgba(0, 255, 102, 0.10);
   /* Ocultar scrollbar pero mantener funcionalidad */
   scrollbar-width: thin;
   scrollbar-color: var(--term-fg-dim) transparent;
