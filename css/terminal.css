@@ -3,15 +3,6 @@
    Simula un monitor CRT de fósforo verde monocromo.
    ============================================================ */
 
-/* ---- Fuente monoespaciada retro ---- */
-@font-face {
-  font-family: 'VT323';
-  font-style: normal;
-  font-weight: 400;
-  src: url('https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2') format('woff2');
-  font-display: swap;
-}
-
 /* ---- Variables globales ---- */
 :root {
   --term-bg: #0a0a0a;
@@ -22,9 +13,9 @@
   --term-glow-strong: rgba(0, 255, 102, 0.7);
   --term-selection-bg: rgba(0, 255, 102, 0.15);
   --term-selection-active: rgba(0, 255, 102, 0.3);
-  --term-font: 'VT323', 'Courier New', 'Lucida Console', monospace;
-  --term-font-size: 1.25rem;
-  --term-line-height: 1.45;
+  --term-font: 'Fira Code', 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+  --term-font-size: 1.05rem;
+  --term-line-height: 1.35;
   --term-padding: 2rem;
   --scanline-opacity: 0.06;
   --flicker-intensity: 0.015;
@@ -115,8 +106,7 @@ retro-terminal::before {
   font-family: var(--term-font);
   font-size: var(--term-font-size);
   line-height: var(--term-line-height);
-  white-space: pre-wrap;
-  word-break: break-word;
+  white-space: pre;
   text-shadow:
     0 0 5px var(--term-glow),
     0 0 10px rgba(0, 255, 102, 0.2);
@@ -145,8 +135,7 @@ retro-terminal::before {
 
 /* ---- Contenedor de texto con máquina de escribir ---- */
 .terminal-text {
-  white-space: pre-wrap;
-  word-break: break-word;
+  white-space: pre;
 }
 
 /* ---- Cursor parpadeante ---- */
