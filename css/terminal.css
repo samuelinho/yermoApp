@@ -143,6 +143,12 @@ retro-terminal::before {
   min-height: 1em;
 }
 
+/* ---- Contenedor de texto con máquina de escribir ---- */
+.terminal-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* ---- Cursor parpadeante ---- */
 .terminal-cursor {
   display: inline-block;

@@ -280,20 +280,23 @@ class RetroTerminal extends HTMLElement {
       // Crear contenedor de texto
       const textEl = document.createElement('div');
       textEl.className = 'terminal-text';
+      // Usamos un nodo de texto para ir añadiendo caracteres sin destruir el cursor
+      const textNode = document.createTextNode('');
+      textEl.appendChild(textNode);
       output.appendChild(textEl);
 
-      // Cursor
+      // Cursor (se mantiene siempre como hijo de textEl)
       const cursorEl = document.createElement('span');
       cursorEl.className = 'terminal-cursor';
       cursorEl.textContent = this.engine.config.cursorChar || '█';
+      textEl.appendChild(cursorEl);
 
       const tick = () => {
         if (charIdx < fullText.length) {
           const char = fullText[charIdx];
 
-          // Añadir carácter
-          textEl.textContent = fullText.substring(0, charIdx + 1);
-          textEl.appendChild(cursorEl);
+          // Actualizar el nodo de texto (no destruye el cursor)
+          textNode.nodeValue = fullText.substring(0, charIdx + 1);
 
           // Sonido de tecleo
           if (charIdx % soundEvery === 0 && char !== ' ' && char !== '\n') {

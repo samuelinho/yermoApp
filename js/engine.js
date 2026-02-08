@@ -85,7 +85,7 @@ export class TerminalEngine {
    * Navega a un nodo por su ID.
    * @param {string} nodeId  ID del nodo destino
    */
-  navigateTo(nodeId) {
+  async navigateTo(nodeId) {
     const node = this.nodes[nodeId];
     if (!node) {
       console.error(`[TerminalEngine] Nodo no encontrado: "${nodeId}"`);
@@ -98,8 +98,9 @@ export class TerminalEngine {
     }
     this.currentNodeId = nodeId;
 
-    // Notificar al componente
-    this.onClear();
+    // Limpiar pantalla y esperar a que termine la animación
+    await this.onClear();
+    // Ahora renderizar el nuevo nodo
     this.onRender(node);
   }
 
