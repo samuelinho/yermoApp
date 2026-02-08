@@ -1,0 +1,473 @@
+{
+  "config": {
+    "startNode": "boot",
+    "typingSpeed": 18,
+    "typingSoundInterval": 2,
+    "optionTypingSpeed": 12,
+    "cursorChar": "█",
+    "promptPrefix": "> ",
+    "title": "YERMO SYSTEMS v2.41"
+  },
+  "nodes": {
+    "boot": {
+      "id": "boot",
+      "text": [
+        "██╗   ██╗███████╗██████╗ ███╗   ███╗ ██████╗",
+        "╚██╗ ██╔╝██╔════╝██╔══██╗████╗ ████║██╔═══██╗",
+        " ╚████╔╝ █████╗  ██████╔╝██╔████╔██║██║   ██║",
+        "  ╚██╔╝  ██╔══╝  ██╔══██╗██║╚██╔╝██║██║   ██║",
+        "   ██║   ███████╗██║  ██║██║ ╚═╝ ██║╚██████╔╝",
+        "   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝ ╚═════╝",
+        "",
+        "YERMO SYSTEMS CORP. — TERMINAL DE ACCESO",
+        "Firmware v2.41 — Build 20260208",
+        "Copyright (c) 2026 Yermo Systems Corp.",
+        "",
+        "Iniciando diagnóstico de hardware... OK",
+        "Verificando módulos de memoria... 640K OK",
+        "Cargando interfaz de usuario...",
+        "",
+        "BIENVENIDO, OPERADOR.",
+        "Nivel de acceso: USUARIO",
+        "",
+        "Seleccione una opción del menú principal:"
+      ],
+      "sound": "boot",
+      "options": [
+        { "label": "Registros del sistema", "goto": "logs_menu" },
+        { "label": "Control de accesos", "goto": "access_control" },
+        { "label": "Comunicaciones", "goto": "comms" },
+        { "label": "Diagnóstico del sistema", "goto": "diagnostics" },
+        { "label": "Acerca de este terminal", "goto": "about" }
+      ]
+    },
+
+    "logs_menu": {
+      "id": "logs_menu",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       REGISTROS DEL SISTEMA              ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Módulo de registros activo.",
+        "Última actualización: 2026-02-08 03:42:17",
+        "",
+        "Seleccione el tipo de registro:"
+      ],
+      "options": [
+        { "label": "Registro de actividad", "goto": "activity_log" },
+        { "label": "Registro de errores", "goto": "error_log" },
+        { "label": "Registro de seguridad", "goto": "security_log" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "activity_log": {
+      "id": "activity_log",
+      "text": [
+        "── REGISTRO DE ACTIVIDAD ──────────────────",
+        "",
+        "[2026-02-08 03:42:17] Sistema reiniciado",
+        "[2026-02-08 03:40:05] Sesión de usuario cerrada",
+        "[2026-02-08 02:15:33] Actualización de firmware aplicada",
+        "[2026-02-07 23:58:01] Copia de seguridad completada",
+        "[2026-02-07 19:20:44] Acceso de usuario: OPERADOR_07",
+        "[2026-02-07 18:00:00] Rotación de registros ejecutada",
+        "[2026-02-07 14:33:12] Puerta Sector B abierta manualmente",
+        "[2026-02-07 09:00:01] Inicio de turno — Sistema operativo",
+        "",
+        "Mostrando últimos 8 registros.",
+        "Para registros anteriores, contacte con el administrador."
+      ],
+      "options": [
+        { "label": "Volver a registros", "goto": "logs_menu" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "error_log": {
+      "id": "error_log",
+      "text": [
+        "── REGISTRO DE ERRORES ────────────────────",
+        "",
+        "[2026-02-08 01:12:07] WARN  — Temperatura CPU: 78°C",
+        "[2026-02-07 22:45:19] ERROR — Timeout en conexión Sector D",
+        "[2026-02-07 22:45:20] INFO  — Reintentando conexión...",
+        "[2026-02-07 22:45:35] INFO  — Conexión restablecida",
+        "[2026-02-06 11:03:55] WARN  — Baja tensión en UPS #2",
+        "[2026-02-05 08:17:40] ERROR — Fallo lectura sensor P-44",
+        "[2026-02-05 08:17:41] INFO  — Sensor P-44 recalibrado",
+        "",
+        "Total de errores esta semana: 2",
+        "Total de advertencias esta semana: 2"
+      ],
+      "options": [
+        { "label": "Volver a registros", "goto": "logs_menu" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "security_log": {
+      "id": "security_log",
+      "text": [
+        "── REGISTRO DE SEGURIDAD ──────────────────",
+        "",
+        "[2026-02-08 03:42:17] Acceso concedido: OPERADOR",
+        "[2026-02-08 03:41:50] Intento de acceso fallido (x1)",
+        "[2026-02-07 23:10:02] Alarma Sector C desactivada",
+        "[2026-02-07 19:20:44] Acceso concedido: OPERADOR_07",
+        "[2026-02-07 14:33:12] Puerta Sector B — Apertura manual",
+        "[2026-02-07 06:00:00] Ronda de seguridad completada",
+        "",
+        "██ ALERTA: 1 intento de acceso fallido reciente ██"
+      ],
+      "options": [
+        { "label": "Volver a registros", "goto": "logs_menu" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "access_control": {
+      "id": "access_control",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       CONTROL DE ACCESOS                 ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Estado general: OPERATIVO",
+        "",
+        "Puertas disponibles:",
+        ""
+      ],
+      "options": [
+        { "label": "Puerta Sector A — CERRADA", "goto": "door_a_closed" },
+        { "label": "Puerta Sector B — ABIERTA", "goto": "door_b_open" },
+        { "label": "Puerta Sector C — CERRADA", "goto": "door_c_closed" },
+        { "label": "Puerta Sector D — BLOQUEADA", "goto": "door_d_blocked" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_a_closed": {
+      "id": "door_a_closed",
+      "text": [
+        "── PUERTA SECTOR A ────────────────────────",
+        "",
+        "Estado actual: ██ CERRADA ██",
+        "Último acceso: 2026-02-07 09:15:00",
+        "Autorización requerida: Nivel USUARIO",
+        "",
+        "¿Desea cambiar el estado?"
+      ],
+      "options": [
+        { "label": "Abrir puerta Sector A", "goto": "door_a_opened" },
+        { "label": "Volver a control de accesos", "goto": "access_control" }
+      ]
+    },
+
+    "door_a_opened": {
+      "id": "door_a_opened",
+      "text": [
+        "── PUERTA SECTOR A ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Verificando autorización... OK",
+        "Enviando señal de apertura...",
+        "",
+        "Estado actual: ██ ABIERTA ██",
+        "",
+        "La puerta del Sector A se ha abierto correctamente.",
+        "Recuerde cerrarla cuando no sea necesaria."
+      ],
+      "sound": "confirm",
+      "options": [
+        { "label": "Cerrar puerta Sector A", "goto": "door_a_closed" },
+        { "label": "Volver a control de accesos", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_b_open": {
+      "id": "door_b_open",
+      "text": [
+        "── PUERTA SECTOR B ────────────────────────",
+        "",
+        "Estado actual: ██ ABIERTA ██",
+        "Abierta desde: 2026-02-07 14:33:12",
+        "Apertura: Manual (exterior)",
+        "",
+        "¿Desea cambiar el estado?"
+      ],
+      "options": [
+        { "label": "Cerrar puerta Sector B", "goto": "door_b_closed" },
+        { "label": "Volver a control de accesos", "goto": "access_control" }
+      ]
+    },
+
+    "door_b_closed": {
+      "id": "door_b_closed",
+      "text": [
+        "── PUERTA SECTOR B ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Enviando señal de cierre...",
+        "",
+        "Estado actual: ██ CERRADA ██",
+        "",
+        "La puerta del Sector B se ha cerrado correctamente."
+      ],
+      "sound": "confirm",
+      "options": [
+        { "label": "Abrir puerta Sector B", "goto": "door_b_open" },
+        { "label": "Volver a control de accesos", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_c_closed": {
+      "id": "door_c_closed",
+      "text": [
+        "── PUERTA SECTOR C ────────────────────────",
+        "",
+        "Estado actual: ██ CERRADA ██",
+        "Último acceso: 2026-02-07 23:10:02",
+        "Autorización requerida: Nivel USUARIO",
+        "",
+        "¿Desea cambiar el estado?"
+      ],
+      "options": [
+        { "label": "Abrir puerta Sector C", "goto": "door_c_opened" },
+        { "label": "Volver a control de accesos", "goto": "access_control" }
+      ]
+    },
+
+    "door_c_opened": {
+      "id": "door_c_opened",
+      "text": [
+        "── PUERTA SECTOR C ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Verificando autorización... OK",
+        "Enviando señal de apertura...",
+        "",
+        "Estado actual: ██ ABIERTA ██",
+        "",
+        "Puerta del Sector C abierta."
+      ],
+      "sound": "confirm",
+      "options": [
+        { "label": "Cerrar puerta Sector C", "goto": "door_c_closed" },
+        { "label": "Volver a control de accesos", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_d_blocked": {
+      "id": "door_d_blocked",
+      "text": [
+        "── PUERTA SECTOR D ────────────────────────",
+        "",
+        "Estado actual: ██ BLOQUEADA ██",
+        "",
+        "██████████████████████████████████████████",
+        "██  ACCESO DENEGADO                     ██",
+        "██  Se requiere autorización NIVEL 5    ██",
+        "██  Contacte con el administrador       ██",
+        "██████████████████████████████████████████",
+        "",
+        "Su nivel de acceso (USUARIO) es insuficiente",
+        "para operar esta puerta."
+      ],
+      "sound": "error",
+      "options": [
+        { "label": "Volver a control de accesos", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "comms": {
+      "id": "comms",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       COMUNICACIONES                     ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Estado del módulo de comunicaciones: ACTIVO",
+        "Señal: ████████░░ 80%",
+        "Último mensaje recibido: hace 2 horas",
+        "",
+        "Seleccione una opción:"
+      ],
+      "options": [
+        { "label": "Ver mensajes recibidos", "goto": "messages_inbox" },
+        { "label": "Enviar mensaje", "goto": "send_message" },
+        { "label": "Estado de la red", "goto": "network_status" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "messages_inbox": {
+      "id": "messages_inbox",
+      "text": [
+        "── BANDEJA DE MENSAJES ────────────────────",
+        "",
+        "Mensajes recibidos (3):",
+        "",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        "DE: CENTRAL",
+        "FECHA: 2026-02-08 01:30:00",
+        "ASUNTO: Actualización de protocolos",
+        "Se han actualizado los protocolos de seguridad.",
+        "Aplicar cambios en el próximo reinicio.",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        "DE: OPERADOR_07",
+        "FECHA: 2026-02-07 19:25:10",
+        "ASUNTO: Turno nocturno",
+        "Todo en orden. Sector B requiere revisión",
+        "manual de la cerradura. Sin urgencia.",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        "DE: SISTEMA",
+        "FECHA: 2026-02-07 18:00:00",
+        "ASUNTO: Backup completado",
+        "Copia de seguridad diaria finalizada sin",
+        "errores. Tamaño: 142MB.",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      ],
+      "options": [
+        { "label": "Volver a comunicaciones", "goto": "comms" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "send_message": {
+      "id": "send_message",
+      "text": [
+        "── ENVIAR MENSAJE ─────────────────────────",
+        "",
+        "Función no disponible en modo USUARIO.",
+        "",
+        "Para enviar mensajes, solicite acceso de",
+        "nivel OPERADOR o superior al administrador",
+        "del sistema.",
+        "",
+        "Código de error: E-4012 (Privilegios insuficientes)"
+      ],
+      "sound": "error",
+      "options": [
+        { "label": "Volver a comunicaciones", "goto": "comms" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "network_status": {
+      "id": "network_status",
+      "text": [
+        "── ESTADO DE LA RED ───────────────────────",
+        "",
+        "Nodo principal:   ● ACTIVO    Latencia: 12ms",
+        "Nodo respaldo:    ● ACTIVO    Latencia: 45ms",
+        "Enlace externo:   ● ACTIVO    Latencia: 230ms",
+        "Sector A:         ● ACTIVO    Latencia: 5ms",
+        "Sector B:         ● ACTIVO    Latencia: 8ms",
+        "Sector C:         ● ACTIVO    Latencia: 6ms",
+        "Sector D:         ○ INACTIVO  Latencia: ---",
+        "",
+        "Ancho de banda utilizado: 23%",
+        "Paquetes perdidos (24h): 0.02%",
+        "",
+        "NOTA: Sector D sin conexión desde 2026-02-07 22:45"
+      ],
+      "options": [
+        { "label": "Volver a comunicaciones", "goto": "comms" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "diagnostics": {
+      "id": "diagnostics",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       DIAGNÓSTICO DEL SISTEMA            ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Ejecutando diagnóstico completo...",
+        "",
+        "CPU:          Intel 8088 @ 4.77 MHz    [ OK ]",
+        "Memoria:      640 KB convencional       [ OK ]",
+        "Disco:        20 MB (12 MB libres)      [ OK ]",
+        "Red:          Ethernet 10BASE-T         [ OK ]",
+        "Vídeo:        Monochrome (Fósforo P39)  [ OK ]",
+        "Audio:        PC Speaker                [ OK ]",
+        "UPS #1:       Carga 98%                 [ OK ]",
+        "UPS #2:       Carga 72%                 [WARN]",
+        "Temp. CPU:    42°C                      [ OK ]",
+        "Ventilador:   2400 RPM                  [ OK ]",
+        "",
+        "Resultado: 9/10 módulos operativos",
+        "Advertencia: UPS #2 por debajo del 80%"
+      ],
+      "options": [
+        { "label": "Ejecutar diagnóstico de nuevo", "goto": "diagnostics" },
+        { "label": "Ver detalles UPS", "goto": "ups_detail" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "ups_detail": {
+      "id": "ups_detail",
+      "text": [
+        "── DETALLE DE UPS ─────────────────────────",
+        "",
+        "UPS #1 (Principal):",
+        "  Modelo: APC Smart-UPS 1500",
+        "  Carga: 98%",
+        "  Autonomía estimada: 45 min",
+        "  Estado: NORMAL",
+        "",
+        "UPS #2 (Respaldo):",
+        "  Modelo: APC Smart-UPS 1500",
+        "  Carga: 72%",
+        "  Autonomía estimada: 28 min",
+        "  Estado: ADVERTENCIA — Baja carga",
+        "  Última carga completa: 2026-02-05",
+        "",
+        "Recomendación: Verificar conexión de carga",
+        "del UPS #2 y programar mantenimiento."
+      ],
+      "options": [
+        { "label": "Volver a diagnóstico", "goto": "diagnostics" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "about": {
+      "id": "about",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       ACERCA DE ESTE TERMINAL            ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "YERMO SYSTEMS TERMINAL v2.41",
+        "",
+        "Desarrollado por Yermo Systems Corp.",
+        "Todos los derechos reservados (c) 2026",
+        "",
+        "Este terminal proporciona acceso a los",
+        "sistemas de control, comunicaciones y",
+        "diagnóstico de la instalación.",
+        "",
+        "Modelo de hardware: YS-T200",
+        "Monitor: Fósforo verde P39, 12 pulgadas",
+        "Resolución: 80x25 caracteres",
+        "Interfaz: Serie RS-232 a 9600 baudios",
+        "",
+        "Para soporte técnico, contacte con:",
+        "soporte@yermosystems.corp",
+        "Extensión interna: 4400"
+      ],
+      "options": [
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    }
+  }
+}

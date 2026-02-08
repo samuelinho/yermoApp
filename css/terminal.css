@@ -1,0 +1,379 @@
+/* ============================================================
+   RETRO TERMINAL — Estilos principales
+   Simula un monitor CRT de fósforo verde monocromo.
+   ============================================================ */
+
+/* ---- Fuente monoespaciada retro ---- */
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* ---- Variables globales ---- */
+:root {
+  --term-bg: #0a0a0a;
+  --term-fg: #00ff66;
+  --term-fg-dim: #00cc52;
+  --term-fg-bright: #33ff88;
+  --term-glow: rgba(0, 255, 102, 0.45);
+  --term-glow-strong: rgba(0, 255, 102, 0.7);
+  --term-selection-bg: rgba(0, 255, 102, 0.15);
+  --term-selection-active: rgba(0, 255, 102, 0.3);
+  --term-font: 'VT323', 'Courier New', 'Lucida Console', monospace;
+  --term-font-size: 1.25rem;
+  --term-line-height: 1.45;
+  --term-padding: 2rem;
+  --scanline-opacity: 0.06;
+  --flicker-intensity: 0.015;
+  --crt-border-radius: 18px;
+}
+
+/* ---- Reset y base ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: var(--term-font);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   Componente <retro-terminal>
+   ============================================================ */
+
+retro-terminal {
+  display: block;
+  position: relative;
+  width: 90vw;
+  max-width: 960px;
+  height: 88vh;
+  max-height: 720px;
+  border-radius: var(--crt-border-radius);
+  overflow: hidden;
+  box-shadow:
+    0 0 60px rgba(0, 255, 102, 0.10),
+    0 0 120px rgba(0, 255, 102, 0.05),
+    inset 0 0 80px rgba(0, 0, 0, 0.5);
+}
+
+/* ---- Monitor "bezel" frame ---- */
+retro-terminal::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: calc(var(--crt-border-radius) + 6px);
+  border: 3px solid #1a1a1a;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 5px rgba(0, 255, 102, 0.05);
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ---- Contenedor principal de la "pantalla" ---- */
+.terminal-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--term-bg);
+  border-radius: var(--crt-border-radius);
+  overflow: hidden;
+  /* Ligero viñeteado */
+  background-image: radial-gradient(
+    ellipse at center,
+    var(--term-bg) 0%,
+    #050505 80%,
+    #000000 100%
+  );
+}
+
+/* ---- Área de texto del terminal con scroll ---- */
+.terminal-output {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: var(--term-padding);
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: var(--term-fg);
+  font-family: var(--term-font);
+  font-size: var(--term-font-size);
+  line-height: var(--term-line-height);
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-shadow:
+    0 0 5px var(--term-glow),
+    0 0 10px rgba(0, 255, 102, 0.2);
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  scrollbar-width: thin;
+  scrollbar-color: var(--term-fg-dim) transparent;
+}
+
+.terminal-output::-webkit-scrollbar {
+  width: 4px;
+}
+
+.terminal-output::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+  background: var(--term-fg-dim);
+  border-radius: 2px;
+}
+
+/* ---- Líneas de texto ---- */
+.terminal-line {
+  min-height: 1em;
+}
+
+/* ---- Cursor parpadeante ---- */
+.terminal-cursor {
+  display: inline-block;
+  color: var(--term-fg-bright);
+  animation: cursor-blink 0.8s step-end infinite;
+  text-shadow:
+    0 0 8px var(--term-glow-strong),
+    0 0 16px var(--term-glow);
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ---- Opciones de menú ---- */
+.terminal-options {
+  margin-top: 0.75em;
+  list-style: none;
+}
+
+.terminal-option {
+  padding: 0.2em 0.5em;
+  margin: 0.15em 0;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.1s, text-shadow 0.1s;
+  color: var(--term-fg);
+  outline: none;
+}
+
+.terminal-option:hover {
+  background: var(--term-selection-bg);
+}
+
+.terminal-option.selected {
+  background: var(--term-selection-active);
+  text-shadow:
+    0 0 8px var(--term-glow-strong),
+    0 0 16px var(--term-glow),
+    0 0 24px rgba(0, 255, 102, 0.15);
+  color: var(--term-fg-bright);
+}
+
+.terminal-option-prefix {
+  color: var(--term-fg-bright);
+  margin-right: 0.25em;
+}
+
+/* ============================================================
+   Efectos CRT — Scanlines
+   ============================================================ */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  border-radius: var(--crt-border-radius);
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 1px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 2px
+  );
+}
+
+/* Línea de escaneo animada que baja por la pantalla */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 255, 102, 0.04),
+    transparent
+  );
+  animation: scanline-sweep 8s linear infinite;
+}
+
+@keyframes scanline-sweep {
+  0% { top: -6px; }
+  100% { top: 100%; }
+}
+
+/* ============================================================
+   Efectos CRT — Flicker
+   ============================================================ */
+.terminal-screen {
+  animation: screen-flicker 0.08s infinite alternate;
+}
+
+@keyframes screen-flicker {
+  0% { opacity: 1; }
+  100% { opacity: calc(1 - var(--flicker-intensity)); }
+}
+
+/* ============================================================
+   Efectos CRT — Viñeteado adicional
+   ============================================================ */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  border-radius: var(--crt-border-radius);
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}
+
+/* ============================================================
+   Animación de entrada del terminal (power on)
+   ============================================================ */
+.terminal-screen.power-on {
+  animation:
+    power-on 0.6s ease-out forwards,
+    screen-flicker 0.08s 0.6s infinite alternate;
+}
+
+@keyframes power-on {
+  0% {
+    filter: brightness(0) blur(10px);
+    transform: scaleY(0.01);
+  }
+  40% {
+    filter: brightness(2) blur(3px);
+    transform: scaleY(0.01);
+  }
+  50% {
+    filter: brightness(2) blur(2px);
+    transform: scaleY(1.1);
+  }
+  70% {
+    filter: brightness(1.2) blur(0.5px);
+    transform: scaleY(1);
+  }
+  100% {
+    filter: brightness(1) blur(0);
+    transform: scaleY(1);
+  }
+}
+
+/* ============================================================
+   Animación de limpieza de pantalla
+   ============================================================ */
+.terminal-output.clearing {
+  animation: clear-screen 0.25s ease-in forwards;
+}
+
+@keyframes clear-screen {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  80% {
+    opacity: 0.3;
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+.terminal-output.appearing {
+  animation: appear-screen 0.2s ease-out forwards;
+}
+
+@keyframes appear-screen {
+  0% {
+    opacity: 0;
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ============================================================
+   Canvas overlay para efectos CRT avanzados
+   ============================================================ */
+.crt-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+  border-radius: var(--crt-border-radius);
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 600px) {
+  :root {
+    --term-font-size: 0.95rem;
+    --term-padding: 1rem;
+  }
+
+  retro-terminal {
+    width: 98vw;
+    height: 95vh;
+    max-height: none;
+    border-radius: 8px;
+  }
+}
+
+@media (min-width: 1400px) {
+  :root {
+    --term-font-size: 1.4rem;
+  }
+
+  retro-terminal {
+    max-width: 1100px;
+    max-height: 840px;
+  }
+}

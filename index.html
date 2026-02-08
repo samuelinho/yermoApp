@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YERMO SYSTEMS — Terminal</title>
+
+  <!-- Fuente retro (fallback a monoespaciada del sistema) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Estilos del terminal -->
+  <link rel="stylesheet" href="css/terminal.css">
+
+  <!-- Web Component del terminal (módulo ES) -->
+  <script type="module" src="js/retro-terminal.js"></script>
+</head>
+<body>
+
+  <!--
+    Terminal retro monocromo.
+    Atributos disponibles:
+      src            — Ruta al JSON de contenido (default: data/content.json)
+      typing-speed   — ms entre caracteres (default: 18)
+      crt-effects    — "true" | "false" para efectos canvas CRT (default: true)
+      sound          — "true" | "false" para habilitar audio (default: true)
+  -->
+  <retro-terminal
+    src="data/content.json"
+    typing-speed="18"
+    crt-effects="true"
+  ></retro-terminal>
+
+</body>
+</html>
