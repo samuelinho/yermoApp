@@ -530,19 +530,26 @@ class RetroTerminal extends HTMLElement {
      ---------------------------------------------------------- */
 
   /**
-   * Limpia la pantalla con una pequeña animación.
+   * Limpia la pantalla con efecto de phosphor decay.
+   * Simula la persistencia del fósforo verde P39.
    */
   _clearScreen() {
     return new Promise((resolve) => {
       this._stopTyping();
       const output = this._els.output;
+      const screen = this._els.screen;
 
+      // Flash global del fósforo en la pantalla
+      screen.classList.add('phosphor-flash');
+      setTimeout(() => screen.classList.remove('phosphor-flash'), 400);
+
+      // Animación de phosphor decay en el contenido
       output.classList.add('clearing');
       setTimeout(() => {
         output.innerHTML = '';
         output.classList.remove('clearing');
         resolve();
-      }, 250);
+      }, 500);
     });
   }
 

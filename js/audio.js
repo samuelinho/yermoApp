@@ -47,8 +47,8 @@ export class TerminalAudio {
      ---------------------------------------------------------- */
 
   /**
-   * Sonido de tecleo: click corto de alta frecuencia.
-   * Se usa durante el efecto de máquina de escribir.
+   * Sonido de tecleo: click suave y corto.
+   * Simula el sonido mecánico sutil de una tecla de terminal.
    */
   playTyping() {
     if (!this.initialized) return;
@@ -56,21 +56,38 @@ export class TerminalAudio {
     const ctx = this.ctx;
     const now = ctx.currentTime;
 
-    const osc = ctx.createOscillator();
+    // Ráfaga de ruido muy corta filtrada (click suave)
+    const sampleRate = ctx.sampleRate;
+    const duration = 0.012; // 12ms — muy breve
+    const samples = Math.floor(sampleRate * duration);
+    const buffer = ctx.createBuffer(1, samples, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < samples; i++) {
+      // Ruido con envolvente exponencial decreciente
+      const envelope = Math.exp(-i / (samples * 0.2));
+      data[i] = (Math.random() * 2 - 1) * envelope;
+    }
+
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+
+    // Filtro paso bajo para suavizar
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 2000 + Math.random() * 500;
+    filter.Q.value = 0.5;
+
     const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.12 + Math.random() * 0.04, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
 
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(1800 + Math.random() * 600, now);
-    osc.frequency.exponentialRampToValueAtTime(600, now + 0.03);
-
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-
-    osc.connect(gain);
+    source.connect(filter);
+    filter.connect(gain);
     gain.connect(this.masterGain);
 
-    osc.start(now);
-    osc.stop(now + 0.05);
+    source.start(now);
+    source.stop(now + 0.03);
   }
 
   /**
