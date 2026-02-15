@@ -139,6 +139,14 @@ Parámetros globales del terminal.
     "startNode": "boot",
     "typingSpeed": 18,
     "typingSoundInterval": 2,
+    "variables": {
+      "door_sector_a": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "ABIERTA",
+        "inactiveText": "CERRADA"
+      }
+    },
     "cursorChar": "█",
     "promptPrefix": "> ",
     "title": "YERMO SYSTEMS v2.41"
@@ -151,9 +159,15 @@ Parámetros globales del terminal.
 | `startNode` | `string` | ID del nodo inicial al arrancar |
 | `typingSpeed` | `number` | ms entre caracteres (sobreescribible por atributo HTML) |
 | `typingSoundInterval` | `number` | Emitir sonido de tecleo cada N caracteres |
+| `variables` | `object` | Estado dinámico global (booleanos y sus textos activo/inactivo) |
 | `cursorChar` | `string` | Carácter del cursor parpadeante |
 | `promptPrefix` | `string` | Prefijo visual de cada opción de menú |
 | `title` | `string` | Título del terminal (uso interno) |
+
+#### Variables y tokens en texto
+
+Puedes usar tokens en cualquier línea de `text` con el formato `{{nombre_variable}}`.
+El motor sustituye el token por `activeText` o `inactiveText` según el estado booleano actual.
 
 ### Bloque `nodes`
 
@@ -171,6 +185,13 @@ Cada nodo es una **pantalla** del terminal. Un objeto con los siguientes campos:
     ],
     "sound": "confirm",
     "options": [
+      {
+        "action": {
+          "variable": "door_sector_a",
+          "activeText": "Cerrar puerta Sector A",
+          "inactiveText": "Abrir puerta Sector A"
+        }
+      },
       { "label": "Ir a otro sitio", "goto": "otro_nodo" },
       { "label": "Volver", "goto": "boot" }
     ],
@@ -185,11 +206,17 @@ Cada nodo es una **pantalla** del terminal. Un objeto con los siguientes campos:
 | `id` | `string` | ✅ | Identificador único del nodo |
 | `text` | `string[]` | ✅ | Líneas de texto (se muestran con efecto typewriter) |
 | `options` | `array` | — | Opciones de menú navegables |
-| `options[].label` | `string` | ✅ | Texto visible de la opción |
-| `options[].goto` | `string` | ✅ | ID del nodo destino al seleccionar |
+| `options[].label` | `string` | — | Texto visible de la opción (para navegación tradicional) |
+| `options[].goto` | `string` | — | ID del nodo destino al seleccionar |
+| `options[].action` | `object` | — | Acción local que alterna una variable y recarga el nodo |
+| `options[].action.variable` | `string` | ✅* | Nombre de variable booleana asociada |
+| `options[].action.activeText` | `string` | ✅* | Texto del botón cuando la variable está activa |
+| `options[].action.inactiveText` | `string` | ✅* | Texto del botón cuando la variable está inactiva |
 | `sound` | `string` | — | Sonido al entrar: `boot`, `confirm`, `error`, `select` |
 | `autoAdvance` | `string` | — | ID del nodo al que avanzar automáticamente |
 | `autoAdvanceDelay` | `number` | — | ms antes del auto-avance (default: 2000) |
+
+\* Obligatorio cuando se usa `options[].action`.
 
 ### Flujo de navegación
 

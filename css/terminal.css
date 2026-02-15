@@ -289,7 +289,7 @@ retro-terminal::before {
   z-index: 9;
   pointer-events: none;
   border-radius: var(--crt-border-radius);
-  opacity: 0.07;
+  opacity: 0.11;
   background-image:
     radial-gradient(circle, rgba(255, 255, 255, 0.18) 0.8px, transparent 0.8px),
     radial-gradient(circle, rgba(0, 0, 0, 0.16) 0.7px, transparent 0.7px);
@@ -301,23 +301,23 @@ retro-terminal::before {
 @keyframes noise-shift {
   0% {
     transform: translate(0, 0);
-    opacity: 0.055;
+    opacity: 0.09;
   }
   25% {
     transform: translate(-1px, 1px);
-    opacity: 0.07;
+    opacity: 0.12;
   }
   50% {
     transform: translate(1px, -1px);
-    opacity: 0.06;
+    opacity: 0.1;
   }
   75% {
     transform: translate(1px, 1px);
-    opacity: 0.075;
+    opacity: 0.125;
   }
   100% {
     transform: translate(0, 0);
-    opacity: 0.055;
+    opacity: 0.09;
   }
 }
 

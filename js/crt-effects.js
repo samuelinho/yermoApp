@@ -17,6 +17,9 @@ export class CRTEffects {
     /** Intensidad de flicker aleatorio (varía con el tiempo) */
     this._flickerTarget = 0;
     this._flickerCurrent = 0;
+    /** Estado de glitch puntual */
+    this._glitchFrames = 0;
+    this._glitchIntensity = 0;
   }
 
   /* ----------------------------------------------------------
@@ -77,6 +80,9 @@ export class CRTEffects {
 
     // 4. Micro-flicker aleatorio (parpadeo muy breve)
     this._drawFlicker(ctx, w, h);
+
+    // 5. Glitch puntual (bandas y jitter horizontal)
+    this._drawGlitch(ctx, w, h);
   }
 
   /* ----------------------------------------------------------
@@ -214,6 +220,55 @@ export class CRTEffects {
       ctx.fillRect(0, 0, w, h);
       ctx.restore();
     }
+  }
+
+  /* ----------------------------------------------------------
+     Glitch puntual de pantalla
+     ---------------------------------------------------------- */
+
+  _drawGlitch(ctx, w, h) {
+    // Activación aleatoria de ráfagas cortas
+    if (this._glitchFrames <= 0 && Math.random() > 0.9925) {
+      this._glitchFrames = 2 + Math.floor(Math.random() * 4);
+      this._glitchIntensity = 0.04 + Math.random() * 0.06;
+    }
+
+    if (this._glitchFrames <= 0) return;
+
+    const slices = 2 + Math.floor(Math.random() * 4);
+
+    ctx.save();
+    for (let i = 0; i < slices; i++) {
+      const sliceY = Math.random() * h;
+      const sliceH = 2 + Math.random() * 14;
+      const shiftX = (Math.random() - 0.5) * 28;
+      const alpha = this._glitchIntensity + Math.random() * 0.04;
+
+      // Banda principal con desplazamiento
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#00ff66';
+      ctx.fillRect(shiftX, sliceY, w, sliceH);
+
+      // Separación cromática sutil para reforzar el efecto glitch
+      ctx.globalAlpha = alpha * 0.35;
+      ctx.fillStyle = '#ff3366';
+      ctx.fillRect(shiftX - 2, sliceY, w, 1);
+      ctx.fillStyle = '#33aaff';
+      ctx.fillRect(shiftX + 2, sliceY + sliceH - 1, w, 1);
+    }
+
+    // Línea de sincronía rota ocasional
+    if (Math.random() > 0.55) {
+      const y = Math.random() * h;
+      ctx.globalAlpha = this._glitchIntensity * 1.2;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, y, w, 1);
+    }
+
+    ctx.restore();
+
+    this._glitchFrames -= 1;
+    this._glitchIntensity *= 0.82;
   }
 
   /* ----------------------------------------------------------

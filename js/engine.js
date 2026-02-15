@@ -26,6 +26,8 @@ export class TerminalEngine {
     this.currentNodeId = null;
     /** Historial de navegación */
     this.history = [];
+    /** Estado de variables dinámicas */
+    this.variables = {};
   }
 
   /* ----------------------------------------------------------
@@ -43,6 +45,7 @@ export class TerminalEngine {
       this.data = await response.json();
       this.config = this.data.config || {};
       this.nodes = this.data.nodes || this.data;
+      this._initializeVariables();
       // Si el JSON no tiene wrapper "nodes", se asume que todo son nodos
       if (!this.data.nodes && !this.data.config) {
         this.nodes = this.data;
@@ -66,6 +69,7 @@ export class TerminalEngine {
         }
       };
       this.config = { startNode: 'error' };
+      this.variables = {};
     }
   }
 
@@ -101,7 +105,7 @@ export class TerminalEngine {
     // Limpiar pantalla y esperar a que termine la animación
     await this.onClear();
     // Ahora renderizar el nuevo nodo
-    this.onRender(node);
+    this.onRender(this.resolveNode(node));
   }
 
   /**
@@ -118,15 +122,33 @@ export class TerminalEngine {
    * @returns {object|null} La opción seleccionada, o null si no es válida
    */
   selectOption(index) {
-    const node = this.getCurrentNode();
+    const node = this.nodes[this.currentNodeId];
     if (!node || !node.options || index < 0 || index >= node.options.length) {
       return null;
     }
+
     const option = node.options[index];
+
+    if (option.action && option.action.variable) {
+      this.toggleVariable(option.action.variable);
+      this.reloadCurrentNode();
+      return option;
+    }
+
     if (option.goto) {
       this.navigateTo(option.goto);
     }
     return option;
+  }
+
+  /**
+   * Recarga el nodo actual sin alterar historial.
+   */
+  async reloadCurrentNode() {
+    const node = this.nodes[this.currentNodeId];
+    if (!node) return;
+    await this.onClear();
+    this.onRender(this.resolveNode(node));
   }
 
   /**
@@ -154,5 +176,95 @@ export class TerminalEngine {
     if (Array.isArray(text)) return text;
     if (typeof text === 'string') return text.split('\n');
     return [''];
+  }
+
+  /**
+   * Inicializa variables dinámicas desde config.variables.
+   */
+  _initializeVariables() {
+    const vars = this.config.variables || {};
+    this.variables = {};
+
+    Object.entries(vars).forEach(([name, def]) => {
+      if (typeof def === 'boolean') {
+        this.variables[name] = {
+          type: 'boolean',
+          value: def,
+          activeText: 'ACTIVA',
+          inactiveText: 'INACTIVA',
+        };
+        return;
+      }
+
+      this.variables[name] = {
+        type: 'boolean',
+        value: Boolean(def.value),
+        activeText: def.activeText || 'ACTIVA',
+        inactiveText: def.inactiveText || 'INACTIVA',
+      };
+    });
+  }
+
+  /**
+   * Devuelve el estado booleano actual de una variable.
+   * @param {string} varName
+   * @returns {boolean}
+   */
+  getVariableState(varName) {
+    return Boolean(this.variables[varName]?.value);
+  }
+
+  /**
+   * Alterna el valor booleano de una variable.
+   * @param {string} varName
+   */
+  toggleVariable(varName) {
+    const variable = this.variables[varName];
+    if (!variable || variable.type !== 'boolean') return;
+    variable.value = !Boolean(variable.value);
+  }
+
+  /**
+   * Resuelve tokens {{variable}} en un string.
+   * @param {string} input
+   * @returns {string}
+   */
+  resolveTokens(input) {
+    if (typeof input !== 'string') return '';
+    return input.replace(/\{\{\s*([a-zA-Z0-9_\-.]+)\s*\}\}/g, (match, varName) => {
+      const variable = this.variables[varName];
+      if (!variable) return match;
+      return variable.value ? variable.activeText : variable.inactiveText;
+    });
+  }
+
+  /**
+   * Devuelve una copia del nodo con texto/opciones resueltas.
+   * @param {object} node
+   * @returns {object}
+   */
+  resolveNode(node) {
+    const textLines = TerminalEngine.normalizeText(node.text).map((line) => this.resolveTokens(line));
+    const rawOptions = Array.isArray(node.options) ? node.options : [];
+
+    const options = rawOptions.map((opt) => {
+      const resolved = { ...opt };
+
+      if (opt.action && opt.action.variable) {
+        const isActive = this.getVariableState(opt.action.variable);
+        const actionLabel = isActive ? opt.action.activeText : opt.action.inactiveText;
+        resolved.label = this.resolveTokens(actionLabel || opt.label || '');
+      } else {
+        resolved.label = this.resolveTokens(opt.label || '');
+      }
+
+      return resolved;
+    });
+
+    return {
+      ...node,
+      text: textLines,
+      options,
+    };
   }
 }

@@ -6,7 +6,27 @@
     "optionTypingSpeed": 12,
     "cursorChar": "█",
     "promptPrefix": "> ",
-    "title": "YERMO SYSTEMS v2.41"
+    "title": "YERMO SYSTEMS v2.41",
+    "variables": {
+      "door_sector_a": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "██ ABIERTA ██",
+        "inactiveText": "██ CERRADA ██"
+      },
+      "door_sector_b": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "██ ABIERTA ██",
+        "inactiveText": "██ CERRADA ██"
+      },
+      "door_sector_c": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "██ ABIERTA ██",
+        "inactiveText": "██ CERRADA ██"
+      }
+    }
   },
   "nodes": {
     "boot": {
@@ -136,13 +156,34 @@
         "",
         "Estado general: OPERATIVO",
         "",
-        "Puertas disponibles:",
-        ""
+        "Puerta Sector A: {{door_sector_a}}",
+        "Puerta Sector B: {{door_sector_b}}",
+        "Puerta Sector C: {{door_sector_c}}",
+        "",
+        "Pulse una opción para alternar estado."
       ],
       "options": [
-        { "label": "Puerta Sector A — CERRADA", "goto": "door_a_closed" },
-        { "label": "Puerta Sector B — ABIERTA", "goto": "door_b_open" },
-        { "label": "Puerta Sector C — CERRADA", "goto": "door_c_closed" },
+        {
+          "action": {
+            "variable": "door_sector_a",
+            "activeText": "Cerrar puerta Sector A",
+            "inactiveText": "Abrir puerta Sector A"
+          }
+        },
+        {
+          "action": {
+            "variable": "door_sector_b",
+            "activeText": "Cerrar puerta Sector B",
+            "inactiveText": "Abrir puerta Sector B"
+          }
+        },
+        {
+          "action": {
+            "variable": "door_sector_c",
+            "activeText": "Cerrar puerta Sector C",
+            "inactiveText": "Abrir puerta Sector C"
+          }
+        },
         { "label": "Puerta Sector D — BLOQUEADA", "goto": "door_d_blocked" },
         { "label": "Volver al menú principal", "goto": "boot" }
       ]
