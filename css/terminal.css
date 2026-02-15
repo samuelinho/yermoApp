@@ -20,13 +20,6 @@
   --scanline-opacity: 0.09;
   --flicker-intensity: 0.03;
   --crt-border-radius: 32px;
-  /* SVG CRT filter parameters */
-  --crt-noise-freq: 0.35;
-  --crt-noise-octaves: 2;
-  --crt-warp-amount: 1;
-  --crt-aberration-offset: 0.0015;
-  --crt-vignette-blur: 18;
-  --crt-vignette-spread: 40;
 }
 
 /* ---- Reset y base ---- */
@@ -63,8 +56,6 @@ retro-terminal {
   max-height: 720px;
   border-radius: var(--crt-border-radius);
   overflow: hidden;
-  /* 3D perspective to simulate convex CRT glass */
-  perspective: 900px;
   box-shadow:
     0 0 40px rgba(0, 255, 102, 0.12),
     0 0 80px rgba(0, 255, 102, 0.08),
@@ -94,11 +85,6 @@ retro-terminal::before {
   background: var(--term-bg);
   border-radius: var(--crt-border-radius);
   overflow: hidden;
-  /* SVG CRT filter */
-  filter: url(#crt-filter);
-  /* 3D curvature: bulge the screen toward the viewer */
-  transform: translateZ(22px);
-  transform-style: preserve-3d;
   /* Ligero viñeteado */
   background-image: radial-gradient(
     ellipse at center,
@@ -106,12 +92,6 @@ retro-terminal::before {
     #050505 80%,
     #000000 100%
   );
-}
-
-/* Desactivar efecto CRT */
-.no-crt .terminal-screen,
-.terminal-screen.no-crt {
-  filter: none;
 }
 
 /* ---- Área de texto del terminal con scroll ---- */
@@ -301,43 +281,44 @@ retro-terminal::before {
 }
 
 /* ============================================================
-   Efectos CRT — Curvatura de pantalla (barrel distortion)
-   Simula la superficie convexa de un monitor CRT.
+   Efectos CRT — Ruido estático (grano)
    ============================================================ */
-.terminal-screen::after {
-  content: '';
+.screen-noise {
   position: absolute;
   inset: 0;
-  z-index: 12;
+  z-index: 9;
   pointer-events: none;
   border-radius: var(--crt-border-radius);
-  /* Sombras internas profundas que oscurecen los bordes — efecto curvatura */
-  box-shadow:
-    inset 0 0 120px rgba(0, 0, 0, 0.50),
-    inset 0 0 60px rgba(0, 0, 0, 0.30),
-    inset 10px 0 20px rgba(0, 0, 0, 0.25),
-    inset -10px 0 20px rgba(0, 0, 0, 0.25),
-    inset 0 10px 20px rgba(0, 0, 0, 0.25),
-    inset 0 -10px 20px rgba(0, 0, 0, 0.25);
-  /* Reflejo especular visible del cristal convexo */
-  background:
-    radial-gradient(
-      ellipse 70% 50% at 30% 25%,
-      rgba(255, 255, 255, 0.045) 0%,
-      transparent 55%
-    ),
-    /* Borde inferior oscuro por curvatura */
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.15) 0%,
-      transparent 12%
-    ),
-    /* Borde superior ligeramente más claro (luz cenital) */
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.008) 0%,
-      transparent 8%
-    );
+  opacity: 0.07;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.18) 0.8px, transparent 0.8px),
+    radial-gradient(circle, rgba(0, 0, 0, 0.16) 0.7px, transparent 0.7px);
+  background-size: 3px 3px, 2px 2px;
+  background-position: 0 0, 1px 1px;
+  animation: noise-shift 180ms steps(2) infinite;
+}
+
+@keyframes noise-shift {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.055;
+  }
+  25% {
+    transform: translate(-1px, 1px);
+    opacity: 0.07;
+  }
+  50% {
+    transform: translate(1px, -1px);
+    opacity: 0.06;
+  }
+  75% {
+    transform: translate(1px, 1px);
+    opacity: 0.075;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.055;
+  }
 }
 
 /* ============================================================
@@ -351,24 +332,24 @@ retro-terminal::before {
 
 @keyframes power-on {
   0% {
-    filter: url(#crt-filter) brightness(0) blur(10px);
-    transform: translateZ(22px) scaleY(0.01);
+    filter: brightness(0) blur(10px);
+    transform: scaleY(0.01);
   }
   40% {
-    filter: url(#crt-filter) brightness(2) blur(3px);
-    transform: translateZ(22px) scaleY(0.01);
+    filter: brightness(2) blur(3px);
+    transform: scaleY(0.01);
   }
   50% {
-    filter: url(#crt-filter) brightness(2) blur(2px);
-    transform: translateZ(22px) scaleY(1.1);
+    filter: brightness(2) blur(2px);
+    transform: scaleY(1.1);
   }
   70% {
-    filter: url(#crt-filter) brightness(1.2) blur(0.5px);
-    transform: translateZ(22px) scaleY(1);
+    filter: brightness(1.2) blur(0.5px);
+    transform: scaleY(1);
   }
   100% {
-    filter: url(#crt-filter) brightness(1) blur(0);
-    transform: translateZ(22px) scaleY(1);
+    filter: brightness(1) blur(0);
+    transform: scaleY(1);
   }
 }
 
@@ -467,7 +448,7 @@ retro-terminal::before {
    Bezel button — controles "on-screen" del monitor
    Monocromo verde fósforo, mismo estilo que el texto.
    z-index 3: por encima del texto (2) pero debajo de
-   vignette (9), scanlines (10), canvas (11), barrel (12)
+  vignette/noise (9), scanlines (10), canvas (11)
    para que le afecten todos los efectos CRT.
    ============================================================ */
 .bezel-btn {

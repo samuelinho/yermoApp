@@ -1,6 +1,6 @@
 /* ============================================================
    RETRO TERMINAL — Efectos CRT avanzados (canvas)
-   Curvatura, ghosting, aberración cromática y distorsión.
+  Ghosting, aberración cromática y distorsión.
    Módulo completamente opcional.
    ============================================================ */
 

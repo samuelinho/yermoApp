@@ -16,7 +16,7 @@
 
 ## ▸ Descripción
 
-**Yermo** es una aplicación web estática que recrea la experiencia de usar un terminal de ordenador de los años 80: pantalla de fósforo verde, efecto de curvatura CRT, scanlines, flicker, phosphor decay, sonidos procedurales y música de fondo.
+**Yermo** es una aplicación web estática que recrea la experiencia de usar un terminal de ordenador de los años 80: pantalla de fósforo verde, scanlines, flicker, phosphor decay, sonidos procedurales y música de fondo.
 
 Todo el contenido navegable (textos, menús, opciones, arte ASCII) se define en un fichero `JSON` con un patrón de nodos y opciones, convirtiendo el motor en una herramienta reutilizable para cualquier narrativa o interfaz.
 
@@ -32,9 +32,7 @@ Todo el contenido navegable (textos, menús, opciones, arte ASCII) se define en 
 [■] Sonidos procedurales — Web Audio API, sin ficheros
 [■] Música de fondo desde playlist JSON (URLs remotas)
 [■] Efectos CRT: scanlines, flicker, phosphor decay
-[■] Filtro SVG: aberración cromática, ruido, viñeta
 [■] Efectos canvas: interferencia, micro-flicker
-[■] Curvatura 3D del monitor (CSS perspective)
 [■] Animación de encendido (power-on)
 [■] Fira Code — soporte completo Unicode/box-drawing
 [■] Diseño responsive
@@ -321,8 +319,7 @@ La simulación CRT usa tres capas complementarias:
 
 | Capa | Tecnología | Efectos |
 |---|---|---|
-| **SVG Filter** | `<filter>` inline | Aberración cromática, distorsión por ruido, viñeta, ruido estático |
-| **CSS** | Animaciones + pseudo-elementos | Scanlines, flicker orgánico, curvatura 3D, phosphor decay, power-on |
+| **CSS** | Animaciones + pseudo-elementos | Scanlines, flicker orgánico, phosphor decay, power-on |
 | **Canvas** | `requestAnimationFrame` | Interferencia horizontal, micro-flicker, aberración de bordes |
 
 ---
@@ -367,7 +364,7 @@ O en `data/content.json`:
 
 ```
 HTML5 ─── Estructura semántica
-CSS3 ──── Variables, animaciones, perspective 3D, SVG filters
+CSS3 ──── Variables y animaciones
 JS ES ─── Módulos nativos, Web Components, Web Audio API, Canvas 2D
 ```
 
@@ -384,7 +381,7 @@ Edge    90+  ✅
 Safari  15+  ✅
 ```
 
-Requiere soporte de ES Modules, Web Components v1, Web Audio API y SVG Filters.
+Requiere soporte de ES Modules, Web Components v1 y Web Audio API.
 
 ---
 

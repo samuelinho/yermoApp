@@ -100,89 +100,10 @@ class RetroTerminal extends HTMLElement {
      ---------------------------------------------------------- */
   _buildDOM() {
     this.innerHTML = `
-      <!-- SVG CRT filter (invisible, solo define filtros) -->
-      <svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
-        <defs>
-          <filter id="crt-filter" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-
-            <!-- 1. Ruido estático base (textura de monitor antiguo) -->
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.35"
-              numOctaves="2"
-              seed="42"
-              stitchTiles="stitch"
-              result="noise" />
-
-            <!-- 2. Distorsión muy sutil con el ruido -->
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="2"
-              xChannelSelector="R"
-              yChannelSelector="G"
-              result="warped" />
-
-            <!-- 3. Aberración cromática:
-                 Separar canales RGB con offsets mínimos -->
-
-            <!-- Canal Rojo desplazado a la izquierda -->
-            <feOffset in="warped" dx="-0.4" dy="0" result="red-shift" />
-            <feColorMatrix in="red-shift" type="matrix"
-              values="1 0 0 0 0
-                      0 0 0 0 0
-                      0 0 0 0 0
-                      0 0 0 1 0"
-              result="red-channel" />
-
-            <!-- Canal Verde (sin desplazamiento) -->
-            <feColorMatrix in="warped" type="matrix"
-              values="0 0 0 0 0
-                      0 1 0 0 0
-                      0 0 0 0 0
-                      0 0 0 1 0"
-              result="green-channel" />
-
-            <!-- Canal Azul desplazado a la derecha -->
-            <feOffset in="warped" dx="0.4" dy="0" result="blue-shift" />
-            <feColorMatrix in="blue-shift" type="matrix"
-              values="0 0 0 0 0
-                      0 0 0 0 0
-                      0 0 1 0 0
-                      0 0 0 1 0"
-              result="blue-channel" />
-
-            <!-- Recomponer: sumar los tres canales -->
-            <feBlend in="red-channel" in2="green-channel" mode="screen" result="rg-merged" />
-            <feBlend in="rg-merged" in2="blue-channel" mode="screen" result="chromatic" />
-
-            <!-- 4. Mezclar ruido estático muy tenue sobre la imagen -->
-            <feColorMatrix in="noise" type="saturate" values="0" result="noise-gray" />
-            <feComponentTransfer in="noise-gray" result="noise-faint">
-              <feFuncA type="linear" slope="0.012" />
-            </feComponentTransfer>
-            <feBlend in="chromatic" in2="noise-faint" mode="normal" result="noisy" />
-
-            <!-- 5. Viñeteado radial: flood negro + blur grande + composición -->
-            <feFlood flood-color="black" flood-opacity="0.3" result="vignette-color" />
-            <feComposite in="vignette-color" in2="SourceGraphic" operator="in" result="vignette-mask" />
-            <feGaussianBlur in="vignette-mask" stdDeviation="60" result="vignette-blur" />
-            <feComposite in="noisy" in2="vignette-blur" operator="arithmetic"
-              k1="0" k2="1" k3="-0.15" k4="0" result="vignetted" />
-
-            <!-- 6. Ajuste final de brillo/contraste -->
-            <feComponentTransfer in="vignetted" result="final">
-              <feFuncR type="linear" slope="1.05" intercept="-0.02" />
-              <feFuncG type="linear" slope="1.05" intercept="-0.02" />
-              <feFuncB type="linear" slope="1.05" intercept="-0.02" />
-            </feComponentTransfer>
-          </filter>
-        </defs>
-      </svg>
-
       <div class="terminal-screen">
         <div class="terminal-output"></div>
         <div class="vignette"></div>
+        <div class="screen-noise"></div>
         <div class="scanlines"></div>
         <canvas class="crt-canvas"></canvas>
         <button class="bezel-btn music-toggle" aria-label="Play/Pause music" title="AUDIO">
