@@ -1,0 +1,524 @@
+{
+  "config": {
+    "startNode": "boot",
+    "typingSpeed": 18,
+    "typingSoundInterval": 2,
+    "optionTypingSpeed": 12,
+    "cursorChar": "█",
+    "promptPrefix": "> ",
+    "title": "VAULT-TEC SECURITY TERMINAL v3.47",
+    "variables": {
+      "door_atrium": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "██ ABIERTO ██",
+        "inactiveText": "██ CERRADO ██"
+      },
+      "door_reactor": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "██ ABIERTO ██",
+        "inactiveText": "██ CERRADO ██"
+      },
+      "door_residences": {
+        "type": "boolean",
+        "value": false,
+        "activeText": "██ ABIERTO ██",
+        "inactiveText": "██ CERRADO ██"
+      }
+    }
+  },
+  "nodes": {
+    "boot": {
+      "id": "boot",
+      "text": [
+        "██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗",
+        "██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝",
+        "██║   ██║███████║██║   ██║██║     ██║   ",
+        "██║   ██║██╔══██║██║   ██║██║     ██║   ",
+        "╚██████╔╝██║  ██║╚██████╔╝███████╗██║   ",
+        " ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   ",
+        "",
+        "VAULT-TEC SECURITY TERMINAL — VAULT 121",
+        "Firmware v3.47 — Build 20770815",
+        "Copyright (c) 2077 Vault-Tec Corporation",
+        "",
+        "Iniciando secuencia de arranque...",
+        "Verificando sistemas de radiación... OK",
+        "Activando sistemas de control de bóveda...",
+        "Integridad estructural: COMPROMETIDA (95%)",
+        "",
+        "BIENVENIDO, RESIDENTE AUTORIZADO.",
+        "Nivel de autorización: RESIDENTE",
+        "Residentes activos: 127 / 150",
+        "",
+        "Seleccione una opción del menú principal:"
+      ],
+      "sound": "boot",
+      "options": [
+        { "label": "Registros de la Bóveda", "goto": "logs_menu" },
+        { "label": "Control de Puertas Blindadas", "goto": "access_control" },
+        { "label": "Comunicaciones (Despacho Overseer)", "goto": "comms" },
+        { "label": "Diagnóstico de Soporte Vital", "goto": "diagnostics" },
+        { "label": "Información de Bóveda-Tec", "goto": "about" }
+      ]
+    },
+
+    "logs_menu": {
+      "id": "logs_menu",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       REGISTROS DE LA BÓVEDA             ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Archivo de Registros de Bóveda 121",
+        "Última actualización: 2082-07-16 14:23:09",
+        "",
+        "Seleccione el tipo de registro:"
+      ],
+      "options": [
+        { "label": "Registro de Actividades Residentes", "goto": "activity_log" },
+        { "label": "Registro de Incidentes Críticos", "goto": "error_log" },
+        { "label": "Registro de Seguridad y Sabotaje", "goto": "security_log" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "activity_log": {
+      "id": "activity_log",
+      "text": [
+        "── REGISTRO DE ACTIVIDADES RESIDENTES ────",
+        "",
+        "[2082-07-16 08:00:00] Turno matutino iniciado (78 residentes activos)",
+        "[2082-07-15 22:30:15] Evento: Descubrimiento de derivación en Ala Este",
+        "[2082-07-15 19:45:00] Fallo de sistemas hidropónicos — Pérdida 12% cosecha",
+        "[2082-07-15 14:20:33] Evento: Reunión de Consejo Residente — Tema: Raciones reducidas",
+        "[2082-07-14 23:15:00] Anomalía radiológica detectada en Ala Inferior (nivel contenido)",
+        "[2082-07-14 18:00:00] Turno vespertino — Operación normal",
+        "[2082-07-13 09:22:12] Evento: Tensión entre Engineering y Residency",
+        "[2082-07-12 15:45:00] Status de Vault: OPERATIVO (Con anomalías menores)",
+        "",
+        "Mostrando últimos 8 registros.",
+        "Registro completo archivado en manos del Overseer."
+      ],
+      "options": [
+        { "label": "Volver a Registros", "goto": "logs_menu" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "error_log": {
+      "id": "error_log",
+      "text": [
+        "── REGISTRO DE INCIDENTES CRÍTICOS ────────",
+        "",
+        "[2082-07-15 19:45:07] CRÍTICO — Fallo Hidroponía: Sistema de riego colapsado",
+        "[2082-07-15 19:45:09] ALERTA  — Radiación detectada en Ala Inferior +15%",
+        "[2082-07-15 19:45:15] INFO   — Aislamiento en progreso...",
+        "[2082-07-15 19:45:45] ALERTA  — Aislamiento completado (85% efectivo)",
+        "[2082-07-14 02:33:22] ALERTA  — Anomalía eléctrica en Reactor Sublevel",
+        "[2082-07-14 02:33:50] INFO   — Descarga de capacitores (normal post-anomalía)",
+        "[2082-07-10 16:00:00] CRÍTICO — Fallo parcial en Sistema de Aire Acondicionado",
+        "",
+        "Incidentes críticos esta semana: 3",
+        "Alertas de radiación esta semana: 7"
+      ],
+      "options": [
+        { "label": "Volver a Registros", "goto": "logs_menu" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "security_log": {
+      "id": "security_log",
+      "text": [
+        "── REGISTRO DE SEGURIDAD Y SABOTAJE ──────",
+        "",
+        "[2082-07-16 09:00:23] ADVERTENCIA — Acceso no autorizado a Ala Este (bloqueado)",
+        "[2082-07-15 23:15:00] Intento de sabotaje en Control de Reactor (detectado por IA)",
+        "[2082-07-15 18:33:02] Guard-Bot 04 — Choque con Residente por Zona Restringida",
+        "[2082-07-15 10:20:00] Acceso concedido: Overseer Joseph Braun",
+        "[2082-07-14 15:45:12] Comportamiento sospechoso en Almacén de Suministros (Investigado)",
+        "[2082-07-12 06:00:00] Patrulla de Seguridad — Ronda completa ejecutada",
+        "",
+        "██ ALERTA CRÍTICA: Intentos de sabotaje en aumento ██"
+      ],
+      "options": [
+        { "label": "Volver a Registros", "goto": "logs_menu" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "access_control": {
+      "id": "access_control",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║       CONTROL DE PUERTAS BLINDADAS       ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Estado General: OPERATIVO (Con Restricciones)",
+        "",
+        "Puerta Atrio Principal: {{door_atrium}}",
+        "Puerta Reactor Nuclear: {{door_reactor}}",
+        "Puerta Ala Residencial: {{door_residences}}",
+        "",
+        "Nota: Cambios de estado serán registrados."
+      ],
+      "options": [
+        {
+          "action": {
+            "variable": "door_atrium",
+            "activeText": "Cerrar Puerta Atrio",
+            "inactiveText": "Abrir Puerta Atrio"
+          }
+        },
+        {
+          "action": {
+            "variable": "door_reactor",
+            "activeText": "Cerrar Puerta Reactor",
+            "inactiveText": "Abrir Puerta Reactor"
+          }
+        },
+        {
+          "action": {
+            "variable": "door_residences",
+            "activeText": "Cerrar Puerta Residencial",
+            "inactiveText": "Abrir Puerta Residencial"
+          }
+        },
+        { "label": "Bóveda de Pruebas — SELLADA (Acceso Overseer)", "goto": "door_d_blocked" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_a_closed": {
+      "id": "door_a_closed",
+      "text": [
+        "── ATRIO PRINCIPAL ────────────────────────",
+        "",
+        "Estado actual: ██ CERRADA ██",
+        "Último acceso: 2082-07-15 17:30:00",
+        "Autorización: Residente o superior",
+        "",
+        "Función: Tránsito general entre alas de la bóveda"
+      ],
+      "options": [
+        { "label": "Abrir Puerta Atrio", "goto": "door_a_opened" },
+        { "label": "Volver a Control de Puertas", "goto": "access_control" }
+      ]
+    },
+
+    "door_a_opened": {
+      "id": "door_a_opened",
+      "text": [
+        "── ATRIO PRINCIPAL ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Verificando credencial de Residente... OK",
+        "Energizando mecanismo de apertura...",
+        "",
+        "Estado actual: ██ ABIERTA ██",
+        "",
+        "Puerta del Atrio operada con éxito.",
+        "Procedencia: Multipropósito. Presencia: Segura."
+      ],
+      "sound": "confirm",
+      "options": [
+        { "label": "Cerrar Puerta Atrio", "goto": "door_a_closed" },
+        { "label": "Volver a Control de Puertas", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_b_open": {
+      "id": "door_b_open",
+      "text": [
+        "── REACTOR NUCLEAR ────────────────────────",
+        "",
+        "Estado actual: ██ ABIERTA ██",
+        "Abierta desde: 2082-07-15 08:00:00",
+        "Indicador de Radiación: AMARILLO (+0.8 rem/hr)",
+        "",
+        "PRECAUCIÓN: Área controlada de Vault-Tec."
+      ],
+      "options": [
+        { "label": "Cerrar Puerta Reactor", "goto": "door_b_closed" },
+        { "label": "Volver a Control de Puertas", "goto": "access_control" }
+      ]
+    },
+
+    "door_b_closed": {
+      "id": "door_b_closed",
+      "text": [
+        "── REACTOR NUCLEAR ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Sellos de contención en posición...",
+        "",
+        "Estado actual: ██ CERRADA █████",
+        "Cierre activo desde: 2082-07-15 09:30:00",
+        "",
+        "Fusión estable. Sistema de refrigeración nominal.",
+        "Puerta Reactor operada con éxito."
+      ],
+      "sound": "confirm",
+      "options": [
+        { "label": "Abrir Puerta Reactor", "goto": "door_b_open" },
+        { "label": "Volver a Control de Puertas", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_c_closed": {
+      "id": "door_c_closed",
+      "text": [
+        "── ALA RESIDENCIAL ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Bloqueando acceso a módulos privados...",
+        "",
+        "Estado actual: ██ CERRADA █████",
+        "Cerrada desde: 2082-07-16 22:45:00",
+        "",
+        "Control de ocupancia: 142 residentes registrados.",
+        "Puerta Ala Residencial sellos activados."
+      ],
+      "options": [
+        { "label": "Abrir Puerta Ala Residencial", "goto": "door_c_opened" },
+        { "label": "Volver a Control de Puertas", "goto": "access_control" }
+      ]
+    },
+
+    "door_c_opened": {
+      "id": "door_c_opened",
+      "text": [
+        "── ALA RESIDENCIAL ────────────────────────",
+        "",
+        "Procesando solicitud...",
+        "Abriendo módulos privados...",
+        "",
+        "Estado actual: ██ ABIERTA ██",
+        "Abierta desde: 2082-07-16 23:00:00",
+        "",
+        "Zona habitable de Bóveda autenticada.",
+        "Puerta Ala Residencial operada con éxito."
+      ],
+      "sound": "confirm",
+      "options": [
+        { "label": "Cerrar Puerta Ala Residencial", "goto": "door_c_closed" },
+        { "label": "Volver a Control de Puertas", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "door_d_blocked": {
+      "id": "door_d_blocked",
+      "text": [
+        "── BÓVEDA DE PRUEBAS EXPERIMENTAL ─────────",
+        "",
+        "Estado actual: ██ SELLADA PERMANENTEMENTE ██",
+        "",
+        "██████████████████████████████████████████",
+        "██  ACCESO DENEGADO PERMANENTEMENTE      ██",
+        "██                                       ██",
+        "██  Bóveda Experimental — Sellada        ██",
+        "██  Se requiere autorización OVERSEER    ██",
+        "██  Orden ejecutiva Overseer J. Braun    ██",
+        "██████████████████████████████████████████",
+        "",
+        "Nivel de acceso (RESIDENTE) insuficiente.",
+        "Dirija consultas al Despacho del Overseer."
+      ],
+      "sound": "error",
+      "options": [
+        { "label": "Volver a Control de Puertas", "goto": "access_control" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "comms": {
+      "id": "comms",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║    SISTEMA DE COMUNICACIONES VAULT      ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Estado módulo de comunicaciones: OPERATIVO",
+        "Frecuencia: ████████░░ 80%",
+        "Último mensaje: Despacho Overseer (hace 2 hrs)",
+        "",
+        "Sistema de radiocomunicación Vault-Tec.",
+        "Buzón de despachos Overseer disponible."
+      ],
+      "options": [
+        { "label": "Leer mensajes recibidos", "goto": "messages_inbox" },
+        { "label": "Enviar reporte", "goto": "send_message" },
+        { "label": "Monitorear red de bóveda", "goto": "network_status" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "messages_inbox": {
+      "id": "messages_inbox",
+      "text": [
+        "── DESPACHOS DEL OVERSEER ─────────────────",
+        "",
+        "Mensajes de la Administración (3):",
+        "",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        "DE: OVERSEER J. BRAUN",
+        "FECHA: 2082-07-16 08:00:00",
+        "ASUNTO: Situación de crisis — Raciones reducidas",
+        "Residentes: Se han detectado anomalías en",
+        "sistemas de hidroponía. Implementar rationing.",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        "DE: DR. RAYMOND SULLIVAN (Chief Engineer)",
+        "FECHA: 2082-07-15 18:30:00",
+        "ASUNTO: Reactor — Estado inestable",
+        "Red de supervisión detectó anomalías de",
+        "radiación en Ala Inferior. Investigación activa.",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        "DE: GUARDIA DE BÓVEDA 04",
+        "FECHA: 2082-07-15 12:00:00",
+        "ASUNTO: Actividad sospechosa reportada",
+        "Intento de acceso no autorizado a Almacén",
+        "de Suministros. Residente marcado para seguimiento.",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      ],
+      "options": [
+        { "label": "Volver a comunicaciones", "goto": "comms" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "send_message": {
+      "id": "send_message",
+      "text": [
+        "── REPORTE A OVERSEER ─────────────────────",
+        "",
+        "Función de reporte NO disponible.",
+        "Solo personal de administración puede",
+        "enviar mensajes de bóveda.",
+        "",
+        "Para reportar anomalías, use:",
+        "Buttonpad de Guardia de Bóveda (Ala Principal)",
+        "",
+        "Error E-SEC-4012 (Autorización insuficiente)"
+      ],
+      "sound": "error",
+      "options": [
+        { "label": "Volver a comunicaciones", "goto": "comms" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "network_status": {
+      "id": "network_status",
+      "text": [
+        "── ESTADO DE RED DE BÓVEDA ────────────────",
+        "",
+        "Centro de Control:   ● ACTIVO  Ping: 12ms",
+        "Nodo Respaldo:       ● ACTIVO  Ping: 45ms",
+        "Repeater Atrio:      ● ACTIVO  Ping: 5ms",
+        "Repeater Reactor:    ● ACTIVO  Ping: 8ms",
+        "Repeater Residencias:● ACTIVO  Ping: 6ms",
+        "Nodo Experimental:   ○ OFFLINE Ping: ---",
+        "",
+        "Ancho de banda: 23% / 100%",
+        "Pérdida de paquetes (24h): 0.02%",
+        "Último error: 2082-07-15 19:45 (Ala Inferior)"
+      ],
+      "options": [
+        { "label": "Volver a comunicaciones", "goto": "comms" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "diagnostics": {
+      "id": "diagnostics",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║   DIAGNÓSTICO DE SISTEMAS DE BÓVEDA    ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "Ejecutando chequeo de sistemas vitales...",
+        "",
+        "Reactor de Fusión:    ████░░░░░░ Nominal  [ OK ]",
+        "Sistema de Aire:      ██████░░░░ Nominal  [ OK ]",
+        "Agua Procesada:       ████████░░ Óptimo   [ OK ]",
+        "Comunicaciones:       ████████░░ 80%      [ OK ]",
+        "Hidroponía Oeste:     ██░░░░░░░░ 25%      [ALRT]",
+        "Hidroponía Este:      ███░░░░░░░ 35%      [ALRT]",
+        "Temperatura Bóveda:   ██████████ 19°C     [ OK ]",
+        "Radiación Sublevel:   ██░░░░░░░░ +0.8rem [ALRT]",
+        "",
+        "Resultado: 6/8 sistemas óptimos",
+        "Alertas activas: 2 (Hidroponía + Radiación)"
+      ],
+      "options": [
+        { "label": "Ejecutar diagnóstico de nuevo", "goto": "diagnostics" },
+        { "label": "Detalles de Reactor/UPS", "goto": "ups_detail" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "ups_detail": {
+      "id": "ups_detail",
+      "text": [
+        "── REACTOR NUCLEAR — DETALLES TÉCNICOS ────",
+        "",
+        "REACTOR PRINCIPAL (Fusion Core RX-01):",
+        "  Modelo: Vault-Tec Fusion Generator Mk.IV",
+        "  Status: ACTIVO (Con anomalías detectadas)",
+        "  Potencia de salida: 150 MW (100%)",
+        "  Fuente de enfriamiento: Activa",
+        "  Tiempo de funcionamiento: 80 años continuo",
+        "",
+        "SISTEMA DE BATERÍAS DE RESPALDO:",
+        "  Carga: 72% (Por debajo de óptimo)",
+        "  Capacidad: 24 horas de autonomía",
+        "  Última carga completa: 2082-07-10",
+        "  Estado: ADVERTENCIA — Ciclos de carga anómalos",
+        "",
+        "Recomendación: Notificar a Dr. Sullivan.",
+        "Revisar ciclos de fusión en próximo mantenimiento."
+      ],
+      "options": [
+        { "label": "Volver a diagnóstico", "goto": "diagnostics" },
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    },
+
+    "about": {
+      "id": "about",
+      "text": [
+        "╔══════════════════════════════════════════╗",
+        "║    INFORMACIÓN ADMINISTRATIVA VAULT      ║",
+        "╚══════════════════════════════════════════╝",
+        "",
+        "VAULT-TEC SECURITY TERMINAL v3.47",
+        "",
+        "Fabricado por: Vault-Tec Corporation",
+        "Todos los derechos reservados (c) 2077",
+        "",
+        "Sistema de acceso, comunicaciones y",
+        "control de infraestructura de bóveda",
+        "para residentes autorizados.",
+        "",
+        "Ubicación: Vault 121 (Estabilidad Social)",
+        "Overseer: Joseph Braun",
+        "Chief Engineer: Dr. Raymond Sullivan",
+        "Chief of Security: James Chen",
+        "",
+        "Nivel de autorización requerido: RESIDENTE",
+        "Acceso a funciones administrativas: OVERSEER",
+        "",
+        "--- FALLOUT SERIES TRIBUTE ---",
+        "Inspired by the Vault-Tec universe"
+      ],
+      "options": [
+        { "label": "Volver al menú principal", "goto": "boot" }
+      ]
+    }
+  }
+}
